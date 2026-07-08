@@ -37,5 +37,11 @@ public async Task<CreateBookResponse> CreateBook(CreateBookRequest request)
             Year = savedBook.Year
         };
     }
+
+    public async Task<bool> DeleteBook(int id)
+{
+    return await bookRepository.DeleteAsync(id);
+
+}
    
 }
