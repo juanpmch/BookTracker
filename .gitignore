@@ -63,3 +63,6 @@ obj/
 *.db
 *.db-shm
 *.db-wal
+
+echo "*.db" >> .gitignore
+echo "*.db-*" >> .gitignore
