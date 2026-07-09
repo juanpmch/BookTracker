@@ -11,15 +11,15 @@ public class UpdateBookTests : IntegrationTest
     public async Task PutBookUpdatesBook()
     {
         Writer.Seed(db =>
-        {
-            db.Books.Add(
-                new Book
-                {
-                    Title = "Dune",
-                    Author = "Frank Herbert",
-                    Year = 1965
-                });
-        });
+ {
+     db.Books.Add(
+         new Book
+         {
+             Title = new BookTitle("Dune"),
+             Author = new AuthorName("Frank Herbert"),
+             Year = 1965
+         });
+ });
 
         var request =
             new UpdateBookRequest
@@ -36,8 +36,8 @@ public class UpdateBookTests : IntegrationTest
         var book = Reader.Query(db => db.Books.Find(1));
 
         Assert.NotNull(book);
-        Assert.Equal("Dune Messiah", book.Title);
-        Assert.Equal("Frank Herbert", book.Author);
+        Assert.Equal("Dune Messiah", book.Title.Value);
+        Assert.Equal("Frank Herbert", book.Author.Value);
         Assert.Equal(1969, book.Year);
     }
 

@@ -16,29 +16,33 @@ public class BookService(IBookRepository bookRepository)
          var summary = books.Select(b => new BookInfo
     {
         Id = b.Id,
-        Title = b.Title,
-        Author = b.Author
+        Title = b.Title.Value,
+        Author = b.Author.Value
     });
         return [..summary];
     }
 
 public async Task<CreateBookResponse> CreateBook(CreateBookRequest request)
-    {
-        var book = new Book
+{
+    var book =
+        new Book
         {
-            Title = request.Title,
-            Author = request.Author,
+            Title = new BookTitle(request.Title),
+            Author = new AuthorName(request.Author),
             Year = request.Year
         };
-        var savedBook = await bookRepository.AddAsync(book);
-        return new CreateBookResponse
+
+    var savedBook = await bookRepository.AddAsync(book);
+
+    return
+        new CreateBookResponse
         {
             Id = savedBook.Id,
-            Title = savedBook.Title,
-            Author = savedBook.Author,
+            Title = savedBook.Title.Value,
+            Author = savedBook.Author.Value,
             Year = savedBook.Year
         };
-    }
+}
 
     public async Task<bool> DeleteBook(int id)
 {
@@ -51,8 +55,8 @@ public async Task<bool> UpdateBook(int id, UpdateBookRequest request)
         new Book
         {
             Id = id,
-            Title = request.Title,
-            Author = request.Author,
+            Title = new BookTitle(request.Title),
+            Author = new AuthorName(request.Author),
             Year = request.Year
         };
 
@@ -72,8 +76,8 @@ public async Task<BookDetails?> GetBookById(int id)
         new BookDetails
         {
             Id = book.Id,
-            Title = book.Title,
-            Author = book.Author,
+            Title = book.Title.Value,
+            Author = book.Author.Value,
             Year = book.Year
         };
 }

@@ -11,15 +11,15 @@ public class GetBookByIdTests : IntegrationTest
     public async Task GetBookByIdReturnsBook()
     {
         Writer.Seed(db =>
+{
+    db.Books.Add(
+        new Book
         {
-            db.Books.Add(
-                new Book
-                {
-                    Title = "Dune",
-                    Author = "Frank Herbert",
-                    Year = 1965
-                });
+            Title = new BookTitle("Dune"),
+            Author = new AuthorName("Frank Herbert"),
+            Year = 1965
         });
+});
 
         var response = await Client.GetAsync("/books/1");
         var book = await response.Content.ReadFromJsonAsync<BookDetails>();

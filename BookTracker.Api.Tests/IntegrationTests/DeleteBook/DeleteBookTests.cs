@@ -9,16 +9,16 @@ public class DeleteBookTests : IntegrationTest
     [Fact]
     public async Task DeleteBookRemovesBook()
     {
-        Writer.Seed(db =>
+       Writer.Seed(db =>
+{
+    db.Books.Add(
+        new Book
         {
-            db.Books.Add(
-                new Book
-                {
-                    Title = "Dune",
-                    Author = "Frank Herbert",
-                    Year = 1965
-                });
+            Title = new BookTitle("Dune"),
+            Author = new AuthorName("Frank Herbert"),
+            Year = 1965
         });
+});
 
         var response = await Client.DeleteAsync("/books/1");
 

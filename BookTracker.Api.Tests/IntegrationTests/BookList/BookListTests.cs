@@ -12,13 +12,13 @@ public class BookListTests : IntegrationTest
     public async Task GetBooksReturnsBooks()
     {
         Writer.Seed(db => db.Books.Add(
-            new Book
-            {
-                Title = "Cannery Row",
-                Author = "John Steinbeck",
-                Year = 1945
-            }
-        ));
+    new Book
+    {
+        Title = new BookTitle("Cannery Row"),
+        Author = new AuthorName("John Steinbeck"),
+        Year = 1945
+    }
+));
 
         var response = await Client.GetAsync("/books");
         var books = await response.Content.ReadFromJsonAsync<List<BookInfo>>();
