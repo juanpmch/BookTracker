@@ -54,6 +54,18 @@ app.MapPut("/books/{id:int}", async (int id, UpdateBookRequest request, BookServ
     return Results.NoContent();
 });
 
+app.MapGet("/books/{id:int}", async (int id, BookService service) =>
+{
+    var book = await service.GetBookById(id);
+
+    if (book is null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(book);
+});
+
 app.Run();
 
 public partial class Program;

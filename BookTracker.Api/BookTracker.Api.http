@@ -45,3 +45,9 @@ Content-Type: application/json
   "author": "Unknown Author",
   "year": 2000
 }
+
+### Get Book by Id
+GET {{BookTracker.Api_HostAddress}}/books/1
+
+### Get Book by Id (not found)
+GET {{BookTracker.Api_HostAddress}}/books/9999

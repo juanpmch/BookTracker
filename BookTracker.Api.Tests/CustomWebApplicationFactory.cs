@@ -38,4 +38,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         connection.Dispose();
         base.Dispose(disposing);
     }
+
+    internal async Task PutAsJsonAsync(string v)
+    {
+        throw new NotImplementedException();
+    }
 }
