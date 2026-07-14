@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using BookTracker.Api.Tests.IntegrationTests;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace BookTracker.Api.Tests;
 
@@ -27,6 +28,14 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             db.Database.EnsureCreated();
         });
+        builder.ConfigureAppConfiguration((context, config) =>
+{
+    config.AddInMemoryCollection(
+        new Dictionary<string, string?>
+        {
+            ["SeedDatabase"] = "false"
+        });
+});
     }
 
     public EfReader GetReader() => new(Services);
