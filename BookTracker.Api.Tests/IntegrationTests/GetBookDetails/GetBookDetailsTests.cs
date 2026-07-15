@@ -1,13 +1,13 @@
 using System.Net;
-using BookTracker.Api.Application.GetBookById;
+using BookTracker.Api.Application.GetBookDetails;
 using BookTracker.Api.Domain;
 
-namespace BookTracker.Api.Tests.IntegrationTests.GetBookById;
+namespace BookTracker.Api.Tests.IntegrationTests.GetBookDetails;
 
-public class GetBookByIdTests : IntegrationTest
+public class GetBookDetailsTest : IntegrationTest
 {
     [Fact]
-    public async Task GetBookByIdReturnsBook()
+    public async Task GetBookDetailsReturnsBookDetail()
     {
         Writer.Seed(db =>
         {
@@ -22,7 +22,7 @@ public class GetBookByIdTests : IntegrationTest
 
         var response = await Client.GetAsync("/books/1");
 
-        var book = await response.ReadJsonAs<BookDetails>(HttpStatusCode.OK);
+        var book = await response.ReadJsonAs<GetBookDetailsResponse>(HttpStatusCode.OK);
 
         Assert.Equal(1, book.Id);
         Assert.Equal("Dune", book.Title);
@@ -31,7 +31,7 @@ public class GetBookByIdTests : IntegrationTest
     }
 
     [Fact]
-    public async Task GetBookByIdReturnsNotFoundWhenBookDoesNotExist()
+    public async Task GetBookDetailsReturnsNotFoundWhenBookDoesNotExist()
     {
         var response = await Client.GetAsync("/books/9999");
 
