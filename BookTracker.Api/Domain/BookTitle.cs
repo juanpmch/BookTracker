@@ -23,6 +23,11 @@ public record BookTitle
         Value = cleaned;
     }
 
+    public static implicit operator string(BookTitle title)
+    {
+        return title.Value;
+    }
+
     public override string ToString()
     {
         return Value;

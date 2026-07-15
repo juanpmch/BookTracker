@@ -57,3 +57,9 @@ GET {{BookTracker.Api_HostAddress}}/books?page=1&pageSize=10
 
 ### Get Books Page 2
 GET {{BookTracker.Api_HostAddress}}/books?page=2&pageSize=10
+
+### Search Books
+GET http://localhost:5202/books?search=octopus
+
+### Search Books With Paging
+GET http://localhost:5202/books?search=octopus&page=1&pageSize=5
