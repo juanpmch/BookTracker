@@ -1,8 +1,7 @@
 using System.Net;
-using System.Net.Http.Json;
 using BookTracker.Api.Application.UpdateBook;
 using BookTracker.Api.Domain;
-
+using System.Net.Http.Json;
 namespace BookTracker.Api.Tests.IntegrationTests.UpdateBook;
 
 public class UpdateBookTests : IntegrationTest
@@ -11,15 +10,15 @@ public class UpdateBookTests : IntegrationTest
     public async Task PutBookUpdatesBook()
     {
         Writer.Seed(db =>
- {
-     db.Books.Add(
-         new Book
-         {
-             Title = new BookTitle("Dune"),
-             Author = new AuthorName("Frank Herbert"),
-             Year = 1965
-         });
- });
+        {
+            db.Books.Add(
+                new Book
+                {
+                    Title = new BookTitle("Dune"),
+                    Author = new AuthorName("Frank Herbert"),
+                    Year = 1965
+                });
+        });
 
         var request =
             new UpdateBookRequest
@@ -31,7 +30,7 @@ public class UpdateBookTests : IntegrationTest
 
         var response = await Client.PutAsJsonAsync("/books/1", request);
 
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        await response.ShouldHaveStatusCode(HttpStatusCode.NoContent);
 
         var book = Reader.Query(db => db.Books.Find(1));
 
@@ -54,6 +53,6 @@ public class UpdateBookTests : IntegrationTest
 
         var response = await Client.PutAsJsonAsync("/books/9999", request);
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        await response.ShouldHaveStatusCode(HttpStatusCode.NotFound);
     }
 }

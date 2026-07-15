@@ -1,4 +1,5 @@
-using System.Net.Http.Json;
+using System.Net;
+
 using BookTracker.Api.Application;
 using BookTracker.Api.Application.BookList;
 using BookTracker.Api.Domain;
@@ -19,7 +20,9 @@ public class BookListTests : IntegrationTest
             }
         ));
 
-        var result = await Client.GetFromJsonAsync<PagedResult<BookInfo>>("/books");
+        var response = await Client.GetAsync("/books");
+
+        var result = await response.ReadJsonAs<PagedResult<BookInfo>>(HttpStatusCode.OK);
 
         Assert.NotNull(result);
 
@@ -33,65 +36,69 @@ public class BookListTests : IntegrationTest
         Assert.Equal(1, result.TotalPages);
     }
     [Fact]
-public async Task GetBooksReturnsRequestedPage()
-{
-    Writer.Seed(db =>
+    public async Task GetBooksReturnsRequestedPage()
     {
-        db.Books.AddRange(
-            new Book
-            {
-                Title = new BookTitle("Book 1"),
-                Author = new AuthorName("Author 1"),
-                Year = 2001
-            },
-            new Book
-            {
-                Title = new BookTitle("Book 2"),
-                Author = new AuthorName("Author 2"),
-                Year = 2002
-            },
-            new Book
-            {
-                Title = new BookTitle("Book 3"),
-                Author = new AuthorName("Author 3"),
-                Year = 2003
-            });
-    });
+        Writer.Seed(db =>
+        {
+            db.Books.AddRange(
+                new Book
+                {
+                    Title = new BookTitle("Book 1"),
+                    Author = new AuthorName("Author 1"),
+                    Year = 2001
+                },
+                new Book
+                {
+                    Title = new BookTitle("Book 2"),
+                    Author = new AuthorName("Author 2"),
+                    Year = 2002
+                },
+                new Book
+                {
+                    Title = new BookTitle("Book 3"),
+                    Author = new AuthorName("Author 3"),
+                    Year = 2003
+                });
+        });
 
-    var result = await Client.GetFromJsonAsync<PagedResult<BookInfo>>("/books?page=2&pageSize=1");
+        var response = await Client.GetAsync("/books?page=2&pageSize=1");
 
-    Assert.NotNull(result);
+        var result = await response.ReadJsonAs<PagedResult<BookInfo>>(HttpStatusCode.OK);
 
-    var book = Assert.Single(result.Items);
+        Assert.NotNull(result);
 
-    Assert.Equal("Book 2", book.Title);
-    Assert.Equal(2, result.Page);
-    Assert.Equal(1, result.PageSize);
-    Assert.Equal(3, result.TotalItems);
-    Assert.Equal(3, result.TotalPages);
-}
+        var book = Assert.Single(result.Items);
 
-[Fact]
-public async Task GetBooksReturnsEmptyItemsWhenPageIsTooHigh()
-{
-    Writer.Seed(db =>
+        Assert.Equal("Book 2", book.Title);
+        Assert.Equal(2, result.Page);
+        Assert.Equal(1, result.PageSize);
+        Assert.Equal(3, result.TotalItems);
+        Assert.Equal(3, result.TotalPages);
+    }
+
+    [Fact]
+    public async Task GetBooksReturnsEmptyItemsWhenPageIsTooHigh()
     {
-        db.Books.Add(
-            new Book
-            {
-                Title = new BookTitle("Book 1"),
-                Author = new AuthorName("Author 1"),
-                Year = 2001
-            });
-    });
+        Writer.Seed(db =>
+        {
+            db.Books.Add(
+                new Book
+                {
+                    Title = new BookTitle("Book 1"),
+                    Author = new AuthorName("Author 1"),
+                    Year = 2001
+                });
+        });
 
-    var result = await Client.GetFromJsonAsync<PagedResult<BookInfo>>("/books?page=99&pageSize=10");
+        var response = await Client.GetAsync("/books?page=99&pageSize=10");
 
-    Assert.NotNull(result);
-    Assert.Empty(result.Items);
-    Assert.Equal(99, result.Page);
-    Assert.Equal(10, result.PageSize);
-    Assert.Equal(1, result.TotalItems);
-    Assert.Equal(1, result.TotalPages);
-}
+        var result = await response.ReadJsonAs<PagedResult<BookInfo>>(HttpStatusCode.OK);
+
+        Assert.NotNull(result);
+        Assert.Empty(result.Items);
+        Assert.Equal(99, result.Page);
+        Assert.Equal(10, result.PageSize);
+        Assert.Equal(1, result.TotalItems);
+        Assert.Equal(1, result.TotalPages);
+    }
 }

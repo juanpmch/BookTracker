@@ -1,4 +1,3 @@
-
 using System.Net;
 using BookTracker.Api.Domain;
 
@@ -9,20 +8,20 @@ public class DeleteBookTests : IntegrationTest
     [Fact]
     public async Task DeleteBookRemovesBook()
     {
-       Writer.Seed(db =>
-{
-    db.Books.Add(
-        new Book
+        Writer.Seed(db =>
         {
-            Title = new BookTitle("Dune"),
-            Author = new AuthorName("Frank Herbert"),
-            Year = 1965
+            db.Books.Add(
+                new Book
+                {
+                    Title = new BookTitle("Dune"),
+                    Author = new AuthorName("Frank Herbert"),
+                    Year = 1965
+                });
         });
-});
 
         var response = await Client.DeleteAsync("/books/1");
 
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        await response.ShouldHaveStatusCode(HttpStatusCode.NoContent);
 
         var book = Reader.Query(db => db.Books.Find(1));
 
@@ -34,6 +33,6 @@ public class DeleteBookTests : IntegrationTest
     {
         var response = await Client.DeleteAsync("/books/9999");
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        await response.ShouldHaveStatusCode(HttpStatusCode.NotFound);
     }
 }

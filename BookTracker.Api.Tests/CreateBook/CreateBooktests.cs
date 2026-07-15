@@ -1,53 +1,51 @@
 using System.Net;
 using System.Net.Http.Json;
 using BookTracker.Api.Application.CreateBook;
-using Microsoft.AspNetCore.Mvc.Testing;
 using BookTracker.Api.Domain;
-
-
 
 namespace BookTracker.Api.Tests.IntegrationTests.CreateBook;
 
 public class CreateBookTests : IntegrationTest
 {
+    [Fact]
+    public async Task PostBookCreatesBook()
+    {
+        var request =
+            new CreateBookRequest
+            {
+                Title = "The Heart Is a Lonely Hunter",
+                Author = "Carson McCullers",
+                Year = 1940
+            };
+        var response = await Client.PostAsJsonAsync("/books", request);
 
-  [Fact]
-public async Task PostBookCreatesBook()
-{
-    var request =
-        new CreateBookRequest
-        {
-            Title = "The Heart Is a Lonely Hunter",
-            Author = "Carson McCullers",
-            Year = 1940
-        };
-    var response = await Client.PostAsJsonAsync("/books", request);
-    var created = await response.Content.ReadFromJsonAsync<CreateBookResponse>();
-    Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-    Assert.NotNull(created);
-    Assert.True(created.Id > 0);
-    Assert.Equal("The Heart Is a Lonely Hunter", created.Title);
+        var created = await response.ReadJsonAs<CreateBookResponse>(HttpStatusCode.Created);
 
-    var book = Reader.Query(context => context.Find<Book>(created.Id));
+        Assert.NotNull(created);
+        Assert.True(created.Id > 0);
+        Assert.Equal("The Heart Is a Lonely Hunter", created.Title);
 
-    Assert.NotNull(book);
-    Assert.Equal("The Heart Is a Lonely Hunter", book.Title.Value);
-    Assert.Equal("Carson McCullers", book.Author.Value);
-    Assert.Equal(1940, book.Year);
-}
-[Fact]
-public async Task PostBookReturnsBadRequestWhenTitleIsWhitespace()
-{
-    var request =
-        new CreateBookRequest
-        {
-            Title = "   ",
-            Author = "Carson McCullers",
-            Year = 1940
-        };
+        var book = Reader.Query(context => context.Find<Book>(created.Id));
 
-    var response = await Client.PostAsJsonAsync("/books", request);
+        Assert.NotNull(book);
+        Assert.Equal("The Heart Is a Lonely Hunter", book.Title.Value);
+        Assert.Equal("Carson McCullers", book.Author.Value);
+        Assert.Equal(1940, book.Year);
+    }
 
-    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-}
+    [Fact]
+    public async Task PostBookReturnsBadRequestWhenTitleIsWhitespace()
+    {
+        var request =
+            new CreateBookRequest
+            {
+                Title = "   ",
+                Author = "Carson McCullers",
+                Year = 1940
+            };
+
+        var response = await Client.PostAsJsonAsync("/books", request);
+
+        await response.ShouldHaveStatusCode(HttpStatusCode.BadRequest);
+    }
 }
