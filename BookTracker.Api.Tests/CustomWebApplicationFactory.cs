@@ -17,6 +17,15 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         connection.Open();
 
+        builder.ConfigureAppConfiguration((context, config) =>
+{
+    config.AddInMemoryCollection(
+        new Dictionary<string, string?>
+        {
+            ["SeedDatabase"] = "false"
+        });
+});
+
         builder.ConfigureServices(services =>
         {
             services.RemoveAll<DbContextOptions<AppDbContext>>();

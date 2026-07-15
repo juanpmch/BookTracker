@@ -35,7 +35,7 @@ if (app.Environment.IsDevelopment())
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         dbContext.Database.EnsureCreated();
-        if(builder.Configuration.GetValue<bool>("SeedDatabase"))
+        if (builder.Configuration.GetValue<bool>("SeedDatabase"))
             DatabaseSeeder.SeedBooks(dbContext, 500);
     }
 }
