@@ -2,7 +2,7 @@ using System.Net;
 
 using BookTracker.Api.Application;
 using BookTracker.Api.Application.GetBookSummaries;
-using BookTracker.Api.Domain;
+using BookTracker.Api.Domain.Books;
 
 namespace BookTracker.Api.Tests.IntegrationTests.BookList;
 

@@ -1,31 +1,31 @@
-namespace BookTracker.Api.Domain
-{
-    public record AuthorName
+namespace BookTracker.Api.Domain.Books;
+
+    public record BookTitle
     {
         public const int MaxLength = 100;
 
         public string Value { get; }
 
-        public AuthorName(string value)
+        public BookTitle(string value)
         {
             var cleaned = value.Trim();
 
             if (string.IsNullOrWhiteSpace(cleaned))
             {
-                throw new DomainException("Author is required.");
+                throw new DomainException("Title is required.");
             }
 
             if (cleaned.Length > MaxLength)
             {
-                throw new DomainException($"Author cannot be longer than {MaxLength} characters.");
+                throw new DomainException($"Title cannot be longer than {MaxLength} characters.");
             }
 
             Value = cleaned;
         }
 
-         public static implicit operator string(AuthorName author)
+        public static implicit operator string(BookTitle title)
         {
-            return author.Value;
+            return title.Value;
         }
 
         public override string ToString()
@@ -33,4 +33,3 @@ namespace BookTracker.Api.Domain
             return Value;
         }
     }
-}

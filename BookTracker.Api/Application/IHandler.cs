@@ -1,3 +1,4 @@
-namespace BookTracker.Api.Application;
-
-public interface IHandler;
+namespace BookTracker.Api.Application
+{
+    public interface IHandler;
+}

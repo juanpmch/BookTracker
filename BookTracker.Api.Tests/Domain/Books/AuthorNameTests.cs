@@ -1,6 +1,7 @@
+using BookTracker.Api.Domain.Books;
 using BookTracker.Api.Domain;
 
-namespace BookTracker.Api.Tests.Domain;
+namespace BookTracker.Api.Tests.Domain.Books;
 
 public class AuthorNameTests
 {

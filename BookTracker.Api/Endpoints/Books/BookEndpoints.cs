@@ -3,6 +3,7 @@ using BookTracker.Api.Application.CreateBook;
 using BookTracker.Api.Application.DeleteBook;
 using BookTracker.Api.Application.GetBookDetails;
 using BookTracker.Api.Application.UpdateBook;
+using BookTracker.Api.Domain.Books;
 using BookTracker.Api.Domain;
 
 namespace BookTracker.Api.Endpoints

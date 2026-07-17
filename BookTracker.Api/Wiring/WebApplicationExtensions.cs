@@ -3,28 +3,29 @@ using BookTracker.Api.Storage;
 using Microsoft.EntityFrameworkCore;
 using BookTracker.Api.Seeding;
 
-namespace BookTracker.Api.Wiring;
-
-public static class WebApplicationExtensions
+namespace BookTracker.Api.Wiring
 {
-    public static WebApplication UseBookTracker(this WebApplication app)
+    public static class WebApplicationExtensions
     {
-        if (app.Environment.IsDevelopment())
+        public static WebApplication UseBookTracker(this WebApplication app)
         {
-            using var scope = app.Services.CreateScope();
-
-            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-            dbContext.Database.EnsureCreated();
-
-            if (app.Configuration.GetValue<bool>("SeedDatabase"))
+            if (app.Environment.IsDevelopment())
             {
-                DatabaseSeeder.SeedBooks(dbContext, 500);
+                using var scope = app.Services.CreateScope();
+
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                dbContext.Database.EnsureCreated();
+
+                if (app.Configuration.GetValue<bool>("SeedDatabase"))
+                {
+                    DatabaseSeeder.SeedBooks(dbContext, 500);
+                }
             }
+
+            app.MapBookEndpoints();
+
+            return app;
         }
-
-        app.MapBookEndpoints();
-
-        return app;
     }
 }
