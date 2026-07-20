@@ -2,6 +2,7 @@ using BookTracker.Api.Endpoints;
 using BookTracker.Api.Storage;
 using Microsoft.EntityFrameworkCore;
 using BookTracker.Api.Seeding;
+using BookTracker.Api.Endpoints.Members;
 
 namespace BookTracker.Api.Wiring
 {
@@ -24,6 +25,8 @@ namespace BookTracker.Api.Wiring
             }
 
             app.MapBookEndpoints();
+            
+            app.MapMemberEndpoints();
 
             return app;
         }

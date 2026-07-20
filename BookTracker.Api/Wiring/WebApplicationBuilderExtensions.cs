@@ -20,6 +20,7 @@ namespace BookTracker.Api.Wiring
                 options.UseSqlite(builder.Configuration.GetConnectionString("BookTracker")));
 
             builder.Services.AddScoped<IBookRepository, EfBookRepository>();
+            builder.Services.AddScoped<IMemberRepository, EfMemberRepository>();
         }
 
         private static void RegisterHandlers(IServiceCollection services)

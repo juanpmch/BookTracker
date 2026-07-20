@@ -22,7 +22,7 @@ public class BookListTests : IntegrationTest
 
         var response = await Client.GetAsync("/books");
 
-        var result = await response.ReadJsonAs<GetBookSummariesResponse<BookSummary>>(HttpStatusCode.OK);
+        var result = await response.ReadJsonAs<GetBookSummariesResponse>(HttpStatusCode.OK);
 
         Assert.NotNull(result);
 
@@ -63,7 +63,7 @@ public class BookListTests : IntegrationTest
 
         var response = await Client.GetAsync("/books?page=2&pageSize=1");
 
-        var result = await response.ReadJsonAs<GetBookSummariesResponse<BookSummary>>(HttpStatusCode.OK);
+        var result = await response.ReadJsonAs<GetBookSummariesResponse>(HttpStatusCode.OK);
 
         Assert.NotNull(result);
 
@@ -92,7 +92,7 @@ public class BookListTests : IntegrationTest
 
         var response = await Client.GetAsync("/books?page=99&pageSize=10");
 
-        var result = await response.ReadJsonAs<GetBookSummariesResponse<BookSummary>>(HttpStatusCode.OK);
+        var result = await response.ReadJsonAs<GetBookSummariesResponse>(HttpStatusCode.OK);
 
         Assert.NotNull(result);
         Assert.Empty(result.Items);
@@ -124,7 +124,7 @@ public class BookListTests : IntegrationTest
 
         var response = await Client.GetAsync("/books?search=dune");
 
-        var result = await response.ReadJsonAs<GetBookSummariesResponse<BookSummary>>(HttpStatusCode.OK);
+        var result = await response.ReadJsonAs<GetBookSummariesResponse>(HttpStatusCode.OK);
 
         var book = Assert.Single(result.Items);
 
@@ -162,7 +162,7 @@ public class BookListTests : IntegrationTest
 
         var response = await Client.GetAsync("/books?search=dune&page=2&pageSize=1");
 
-        var result = await response.ReadJsonAs<GetBookSummariesResponse<BookSummary>>(HttpStatusCode.OK);
+        var result = await response.ReadJsonAs<GetBookSummariesResponse>(HttpStatusCode.OK);
 
         var book = Assert.Single(result.Items);
 
@@ -172,5 +172,4 @@ public class BookListTests : IntegrationTest
         Assert.Equal(2, result.TotalItems);
         Assert.Equal(2, result.TotalPages);
     }
-
 }
