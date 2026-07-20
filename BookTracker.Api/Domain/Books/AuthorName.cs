@@ -1,36 +1,35 @@
-namespace BookTracker.Api.Domain.Books
+namespace BookTracker.Api.Domain.Books;
+
+public record AuthorName
 {
-    public record AuthorName
+    public const int MaxLength = 100;
+
+    public string Value { get; }
+
+    public AuthorName(string value)
     {
-        public const int MaxLength = 100;
-
-        public string Value { get; }
-
-        public AuthorName(string value)
+        if (string.IsNullOrWhiteSpace(value))
         {
-            var cleaned = value.Trim();
-
-            if (string.IsNullOrWhiteSpace(cleaned))
-            {
-                throw new DomainException("Author is required.");
-            }
-
-            if (cleaned.Length > MaxLength)
-            {
-                throw new DomainException($"Author cannot be longer than {MaxLength} characters.");
-            }
-
-            Value = cleaned;
+            throw new DomainException("Author is required.");
         }
 
-         public static implicit operator string(AuthorName author)
+        var cleaned = value.Trim();
+
+        if (cleaned.Length > MaxLength)
         {
-            return author.Value;
+            throw new DomainException($"Author cannot be longer than {MaxLength} characters.");
         }
 
-        public override string ToString()
-        {
-            return Value;
-        }
+        Value = cleaned;
+    }
+
+    public static implicit operator string(AuthorName author)
+    {
+        return author.Value;
+    }
+
+    public override string ToString()
+    {
+        return Value;
     }
 }

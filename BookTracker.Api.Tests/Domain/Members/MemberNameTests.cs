@@ -34,4 +34,12 @@ public class MemberNameTests
 
         Assert.Throws<DomainException>(() => new MemberName(name));
     }
+
+    [Fact]
+public void Constructor_WithNull_ShouldThrowDomainException()
+{
+    var exception = Assert.Throws<DomainException>(() => new MemberName(null!));
+
+    Assert.Equal("Name is required.", exception.Message);
+}
 }

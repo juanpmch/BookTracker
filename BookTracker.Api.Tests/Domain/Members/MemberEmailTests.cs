@@ -40,4 +40,12 @@ public class MemberEmailTests
     {
         Assert.Throws<DomainException>(() => new MemberEmail("juantest.com"));
     }
+
+    [Fact]
+public void Constructor_WithNull_ShouldThrowDomainException()
+{
+    var exception = Assert.Throws<DomainException>(() => new MemberEmail(null!));
+
+    Assert.Equal("Email is required.", exception.Message);
+}
 }
